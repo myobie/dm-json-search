@@ -8,15 +8,9 @@ gem install gemcutter          # unless you already have
 gem tumble                     # unless you already have
 gem install dm-json-search
 
-Then, in your model:
-
-class Book
-  include JsonSearch::Searchable
-end
-
 Wala:
 
-Book.search('[{"eql":{"title":"Psycho"}}]')
+Book.all_from_json('[{"eql":{"title":"Psycho"}}]')
 # Should this be mixed in automagically to every model?
 
 

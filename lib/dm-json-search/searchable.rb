@@ -1,12 +1,8 @@
 module JsonSearch
   module Searchable
   
-    def self.included(base)
-      base.extend(ClassMethods)
-    end
-  
     module ClassMethods
-      def search(json = {})
+      def all_from_json(json = {})
         json = JSON.parse(json) if json.is_a?(String)
     
         if json.is_a?(Array)
@@ -26,4 +22,3 @@ module JsonSearch
   
   end
 end
-JSONSearch = JsonSearch
