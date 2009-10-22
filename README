@@ -1,0 +1,75 @@
+Search your models with JSON!
+=============================
+
+How to use
+----------
+
+gem install gemcutter          # unless you already have
+gem tumble                     # unless you already have
+gem install dm-json-search
+
+Then, in your model:
+
+class Book
+  include JsonSearch::Searchable
+end
+
+Wala:
+
+Book.search('[{"eql":{"title":"Psycho"}}]')
+# Should this be mixed in automagically to every model?
+
+
+Another example query and it's json
+-----------------------------------
+
+puts Ticket.select { |t| 
+  t.title == "foo" || (t.user_id == 6 && t.account_id == 9) 
+}.query.to_json
+
+Becomes:
+
+{
+    "model": "Ticket",
+    "repository": "default",
+    "conditions": {
+        "and": [{
+            "or": [{
+                "eql": { "Ticket.title": "foo" }
+            },
+            {
+                "and": [{
+                    "eql": { "Ticket.user_id": 6 }
+                },
+                {
+                    "eql": { "Ticket.account_id": 9 }
+                }]
+            }]
+        }]
+    },
+    "reload": false,
+    "order": ["Ticket.id.asc"],
+    "fields": [...],
+    "links": [], // these don't work yet
+    "unique": false,
+    "limit": null,
+    "offset": 0
+}
+
+
+Explanation
+-----------
+
+Operations are objects with a key for the Operation#slug and an array of operands. Comparisons are object with a key for the Comparison#slug and an object with a property key and a value for the comparison.
+
+So, you can send in a huge json string like the above, or you can just send in the conditions part: { "and": [...] }. Or, if you just send in an array, it will wrap that array in an "and" hash.
+
+All DM Operations and Conditions are permitted on any Property of any Model. This probably needs to be changed to only search some fields.
+
+
+TODO
+----
+
+* Spec it out and make sure there are no vectors for destructive actions
+* Make links work
+* Make it better?
