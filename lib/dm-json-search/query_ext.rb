@@ -110,6 +110,11 @@ class DataMapper::Query
       compare = comparison.values.first
       subject = string_to_subject(compare.keys.first)
       value = compare.values.first
+      
+      if value.is_a?(Hash) && value.keys.length == 1 && value.keys.first == "collection"
+        value = DataMapper::Collection.new(DataMapper::Query.from_hash(value.values.first))
+      end
+      
       DataMapper::Query::Conditions::Comparison.new(slug, subject, value)
     end
 
@@ -125,6 +130,8 @@ class DataMapper::Query
   
 private
   def operation_to_hash(operation)
+    return {} if operation.slug == :null # just forget null's, they don't exist
+    
     {
       operation.slug => operation.operands.collect { |o| operand_to_hash(o) }
     }
@@ -143,9 +150,12 @@ private
   end
   
   def comparison_to_hash(comparison)
+    value = comparison.value
+    value = { "collection" => value.query.to_hash } if value.class == DataMapper::Collection
+    
     {
       comparison.slug => {
-        subject_to_hash(comparison.subject) => comparison.value
+        subject_to_hash(comparison.subject) => value
       }
     }
   end
