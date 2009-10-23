@@ -16,4 +16,19 @@ describe "dm-json-search" do
     j.should == k
   end
   
+  should "run the query" do
+    j = Book.all(:author => Author.all(:place => Place.all)).query.to_json
+    Book.all_from_json(j).class.should == DataMapper::Collection
+  end
+  
+  should "fetch the correct book" do
+    Book.auto_migrate!
+    Book.gen
+    Book.gen(:title => "foo")
+    
+    books = Book.all_from_json('[{"eql":{"Book.title":"foo"}}]')
+    books.length.should == 1
+    books.first.title.should == "foo"
+  end
+  
 end

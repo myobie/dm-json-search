@@ -10,7 +10,7 @@ gem install dm-json-search
 
 Wala:
 
-Book.all_from_json('[{"eql":{"title":"Psycho"}}]')
+Book.all_from_json('[{"eql":{"Book.title":"Psycho"}}]')
 # Should this be mixed in automagically to every model?
 
 
