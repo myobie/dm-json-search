@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{dm-json-search}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nathan Herald"]
-  s.date = %q{2009-10-22}
+  s.date = %q{2009-10-24}
   s.description = %q{Use JSON and Hashes to create complex queries on your DM models.}
   s.email = %q{nathan@myobie.com}
   s.extra_rdoc_files = [

@@ -31,7 +31,7 @@ class DataMapper::Query
     
     def from_hash(hash)
       
-      respository = hash["repository"].to_sym
+      respository = (hash["repository"] || :default).to_sym
       model = string_to_model(hash["model"])
       options = {}
       
